@@ -1,0 +1,17 @@
+// mixins
+@mixin text-shadow($distance:5px,$color:#222,$direction:sw,$offset:0,$blur:0) {
+  text-shadow:text-shadow($distance,$color,to-lower-case($direction),$offset,$blur);
+}
+@mixin long-shadow($height:15,$color:#222,$direction:sw,$offset:0,$blur:0) {
+  text-shadow: long-shadow($height:$height,$color:$color,$direction:to-lower-case($direction),$offset:$offset,$blur:$blur);
+}
+@mixin text-border($size:1px,$color:#222) {
+  text-shadow:
+    text-border($size,$color),
+    ;
+}
+@mixin block($height:10,$block-color:#aaa,$shadow-color:#777,$direction:se) {  
+  text-shadow:
+    block($height:$height,$block-color:$block-color,$shadow-color:$shadow-color,$direction:to-lower-case($direction)),
+    ;
+}
