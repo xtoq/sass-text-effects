@@ -1,0 +1,91 @@
+// functions
+@function direction($direction,$value) {
+  @if $direction == n {
+    $direction:(0) (-$value)
+  }
+  @if $direction == ne {
+    $direction:($value) (-$value)
+  }
+  @if $direction == e {
+    $direction:($value) (0)
+  }
+  @if $direction == se {
+    $direction:($value) ($value)
+  }
+  @if $direction == s {
+    $direction:(0) ($value)
+  }
+  @if $direction == sw {
+    $direction:(-$value) ($value)
+  }
+  @if $direction == w {
+    $direction:(-$value) (0)
+  }
+  @if $direction == nw {
+    $direction:(-$value) (-$value)
+  }
+  @return $direction;
+}
+@function text-shadow($distance:5px,$color:#222,$direction:sw,$offset:0,$blur:0) {
+  $text-shadow:0;
+  $position:$distance+$offset;
+  $text-shadow:direction($value:$position,$direction:$direction) ($blur/10)*$distance $color;
+  @return $text-shadow;
+}
+@function text-border($size:1px,$color:#222) {
+  $text-shadow:
+    text-shadow($size,$color,$direction:sw),
+    text-shadow($size,$color,$direction:se),
+    text-shadow($size,$color,$direction:ne),
+    text-shadow($size,$color,$direction:nw),
+    ;
+  @return $text-shadow;
+}
+@function block($height:10,$block-color:gray,$direction:se,$offset:0,$shadow-color:black) {
+  $text-shadow:
+    0 0 $block-color,
+    ;
+  @for $i from 1 through $height {
+      @if $direction == se {
+        $text-shadow:
+          text-shadow($distance:$i+0px,$direction:$direction,$color:$block-color),
+          #{$text-shadow},
+          ($offset + $height + -$i * 2)+px ($offset + $height + ($i))+px $shadow-color,
+        ;
+      }
+      @if $direction == sw {
+        $text-shadow:
+          text-shadow($distance:$i+0px,$direction:$direction,$color:$block-color),
+          #{$text-shadow},
+          -($offset + $height + -$i * 2)+px ($offset + $height + ($i))+px $shadow-color,
+        ;
+      }
+      @if $direction == ne {
+        $text-shadow:
+          text-shadow($distance:$i+0px,$direction:$direction,$color:$block-color),
+          #{$text-shadow},
+          ($offset + $height + -$i * 2)+px ($offset + -$height + (-$i))+px $shadow-color,
+        ;
+      }
+      @if $direction == nw {
+        $text-shadow:
+          text-shadow($distance:$i+0px,$direction:$direction,$color:$block-color),
+          #{$text-shadow},
+          ($offset + -$height + $i * 2)+px ($offset + -$height + (-$i))+px $shadow-color,
+        ;
+      }
+  }
+  @return $text-shadow;
+}
+@function long-shadow($height:15,$color:#222,$direction:sw,$offset:0,$blur:0) {
+  $long-shadow:
+    0 0 $color;
+  @for $i from 1 through $height {
+    $distance:($offset + $i)+px;
+    $long-shadow:
+      #{$long-shadow},
+      text-shadow($color:$color,$direction:direction($value:$distance,$direction:$direction),$offset:$offset),
+      ;
+  }
+  @return $long-shadow;
+}
